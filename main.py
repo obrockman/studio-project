@@ -2,6 +2,10 @@ import webapp2, jinja2, os, re
 from google.appengine.ext import db
 from models import Post, User
 import hashutils
+import datetime
+import time
+
+
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
@@ -10,8 +14,8 @@ class BlogHandler(webapp2.RequestHandler):
     """ Utility class for gathering various useful methods that are used by most request handlers """
 
     def get_posts(self, limit, offset):
-        """ Get all posts ordered by creation date (descending) """
-        query = Post.all().order('-created')
+        """ Get all posts ordered by *teacher (*alphabetical) """
+        query = Post.all().order('teacher')
         return query.fetch(limit=limit, offset=offset)
 
     def get_posts_by_user(self, user, limit, offset):
@@ -19,7 +23,7 @@ class BlogHandler(webapp2.RequestHandler):
             Get all posts by a specific user, ordered by creation date (descending).
             The user parameter will be a User object.
         """
-        user_author = Post.all().order('-created')
+        user_author = Post.all().order('teacher')
         return user_author.filter('author =', user).fetch(limit=limit, offset=offset)
 
 
@@ -63,10 +67,18 @@ class BlogHandler(webapp2.RequestHandler):
 class IndexHandler(BlogHandler):
 
     def get(self):
-        """ List all blog users """
+        """ List all blog users  """
         users = User.all()
         t = jinja_env.get_template("index.html")
-        response = t.render(users = users)
+        response = t.render(users = users) 
+        self.response.write(response)
+
+class TeacherHandler(BlogHandler): #Trying to at least 
+    def get(self):
+        """ List all teachers by name """ 
+        teachers = Post.teachers.all()
+        t = jinja_env.get_template("index.html")
+        response = t.render(teachers=teachers)
         self.response.write(response)
 
 class BlogIndexHandler(BlogHandler):
@@ -117,26 +129,31 @@ class BlogIndexHandler(BlogHandler):
 
 class NewPostHandler(BlogHandler):
 
-    def render_form(self, title="", body="", error=""):
+    def render_form(self, teacher="", body="", student="", lessondate="", error=""):
         """ Render the new post form with or without an error, based on parameters """
         t = jinja_env.get_template("newpost.html")
-        response = t.render(title=title, body=body, error=error)
+        response = t.render(teacher=teacher, body=body, student=student, lessondate=lessondate, error=error)
         self.response.out.write(response)
+
 
     def get(self):
         self.render_form()
 
     def post(self):
         """ Create a new blog post if possible. Otherwise, return with an error message """
-        title = self.request.get("title")
+        teacher = self.request.get("teacher")
         body = self.request.get("body")
+        student = self.request.get("student")
+        lessondate = self.request.get("lessondate")
 
-        if title and body:
+        if teacher and body and student and lessondate:
 
             # create a new Post object and store it in the database
             post = Post(
-                title=title,
+                teacher=teacher,
                 body=body,
+                student=student,
+                lessondate=lessondate,
                 author=self.user)
             post.put()
 
@@ -144,8 +161,8 @@ class NewPostHandler(BlogHandler):
             id = post.key().id()
             self.redirect("/blog/%s" % id)
         else:
-            error = "we need both a title and a body!"
-            self.render_form(title, body, error)
+            error = "Please include a teacher, student, lesson date and comment!"
+            self.render_form(teacher, body,student, lessondate, error)
 
 class ViewPostHandler(BlogHandler):
 

@@ -1,5 +1,5 @@
 body {
-    font-family: sans-serif;
+    font-family: 'Poiret One', cursive, sans-serif;
     width: 800px;
     margin: 0 auto;
     padding: 10px;
@@ -41,7 +41,7 @@ hr {
     margin-top: 20px;
 }
 
-.post-title {
+.post-teacher {
     font-weight: bold;
     font-size: 20px;
 }

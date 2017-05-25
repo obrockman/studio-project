@@ -6,8 +6,11 @@ class User(db.Model):
     email = db.StringProperty()
 
 class Post(db.Model):
-    title = db.StringProperty(required = True)
-    body = db.TextProperty(required = True)
+    teacher = db.StringProperty(required = True)
+    student = db.StringProperty(required = True)
+    lessondate = db.StringProperty(required = False)
+    body = db.TextProperty(required = False)
     created = db.DateTimeProperty(auto_now_add = True)
     author = db.ReferenceProperty(required = True) 
+
 

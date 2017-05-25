@@ -6,11 +6,12 @@
 
 {% for post in posts %}
 
-<h2><a href="/blog/{{ post.key().id() }}">{{ post.title }}</a></h2>
+<h2><a href="/blog/{{ post.key().id() }}">{{ post.teacher}}</a></h2>
 <p>{{ post.body }}</p>
 <p class="post-author">
     written by <a href="/blog/{{ post.author.username }}">{{post.author.username}}</a>
 </p>
+    
     
 
 {% endfor %}

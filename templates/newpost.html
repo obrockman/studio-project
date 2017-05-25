@@ -2,19 +2,54 @@
 
 {% block content %}
 
+
 <h1>new post</h1>
 
 <form method="post">
     <label>
-        <div>title</div>
-        <input type="text" name="title" value="{{title}}">
+        <div>teacher</div>
+        <input type="text" name="teacher" value="{{teacher}}">
     </label>
     <label>
-        <div>post</div>
+        <div>student</div>
+        <input type="text" name="student" value="{{student}}"><br>new student?
+        <input type="radio" name="newstudent"  onclick="showEmail()">yes
+        <input type="radio" name="newstudent" value="no" checked>no<br>
+        <div id="newinfo"></div>
+        <input type="text" id="getemail" name="email" value="{{email}}" hidden="true"> 
+        <input type="date" id="startdate" name="startdate" value="{{startdate}}" hidden="true">
+        
+    </label>
+    <label>
+        <div>date of lesson</div>
+        <input type="date" id="lessondate" name="lessondate" value="{{lessondate}}" onblur="getDate()"> <!--this is not working.. db is not reading info as a real date.--> 
+    </label>
+    <label>
+        <div>reason: </div>
+        <input type=""
+        
+    </label>
+    <label>
+        <div>comments</div>
         <textarea name="body">{{body}}</textarea>
     </label>
     <div class="error">{{ error }}</div>
     <input type="submit">
+
+<script> 
+    function showEmail() {
+        document.getElementById("getemail").removeAttribute("hidden");
+        document.getElementById("newinfo").innerHTML = "email & start date";
+        document.getElementById("startdate").removeAttribute("hidden");
+    }
+
+    function getDate() {
+        var x = document.getElementById("lessondate").value; /*failed attempt at converting the date input in html to javascript date object*/ 
+        console.log(typeof x);
+        
+    }
+</script> 
 </form>
+
 
 {% endblock %}

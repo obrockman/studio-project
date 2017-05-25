@@ -23,6 +23,16 @@ indexes:
 
 - kind: Post
   properties:
+  - name: author
+  - name: teacher
+
+- kind: Post
+  properties:
+  - name: author
+  - name: title
+
+- kind: Post
+  properties:
   - name: author=
   - name: created
 

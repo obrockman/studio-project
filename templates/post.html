@@ -2,8 +2,10 @@
 
 {% block content %}
 
-<h2 class="post-title">{{ post.title }}</h2>
-<p class="post-body">{{ post.body }}</p>
+<h2 class="post-teacher">Teacher: {{ post.teacher }}</h2>
+<p class="post-student">Student: {{post.student}}</p>
+<p class="post-lessondate">Date of Lesson: {{post.lessondate}}</p> 
+<p class="post-body">Comments: {{ post.body }}</p>
 <!-- TODO add author w/ link to author's blog -->
 <p class="post-author">
    written by <a href="/blog/{{ post.author.username }}">{{post.author.username}}</a> on {{ post.created.strftime('%Y-%m-%d') }}
